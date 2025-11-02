@@ -1,0 +1,49 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">Solicitar Ayuda</h2>
+      <button class="close-button" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="task-summary">
+      <p class="summary-title">{{ task.nombre }}</p>
+      <p class="summary-subject">{{ task.materia }}</p>
+      <p class="summary-grade">Calificación actual: {{ task.calificacion }}%</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit($event)">
+      <div class="form-group">
+        <label class="form-label">Tipo de ayuda que necesitas</label>
+        <select 
+          class="form-select"
+          [(ngModel)]="tipoAyuda"
+          name="tipoAyuda"
+          required>
+          <option *ngFor="let tipo of tiposAyuda" [value]="tipo.value">
+            {{ tipo.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Describe tu duda o problema</label>
+        <textarea
+          class="form-textarea"
+          [(ngModel)]="mensaje"
+          name="mensaje"
+          rows="5"
+          placeholder="Explica en qué necesitas ayuda..."
+          required></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onClose()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-submit">
+          Enviar Solicitud
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
