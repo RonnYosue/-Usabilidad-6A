@@ -1,0 +1,60 @@
+<main class="alumno-container">
+
+    <header>
+      <app-encabezado></app-encabezado>
+    </header>
+
+  <section class="perfil">
+    <h2>Bienvenido, {{ usuario.nombre || usuario.usuario }}</h2>
+    <button class="cerrar-btn" (click)="cerrarSesion()">
+      <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+    </button>
+  </section>
+
+  <section class="calificaciones">
+    <h3>Tus Calificaciones</h3>
+
+    <div class="tabla">
+      <div class="fila header">
+        <div>Materia</div>
+        <div>Calificación</div>
+      </div>
+      <div class="fila" *ngFor="let c of calificaciones">
+        <div>{{ c.materia }}</div>
+        <div [ngClass]="{ 'baja': c.nota < 6.0, 'alta': c.nota >= 9.0 }">
+          {{ c.nota }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ayuda">
+    <h3>¿Necesitas ayuda?</h3>
+    <p>
+      Cuéntanos con qué tarea o materia necesitas apoyo, y un tutor se comunicará contigo.
+    </p>
+
+    <textarea
+      [(ngModel)]="mensajeAyuda"
+      rows="4"
+      placeholder="Ejemplo: Necesito ayuda con matemáticas, no entiendo las ecuaciones..."
+    ></textarea>
+
+    <button (click)="solicitarAyuda()" class="enviar-btn">Enviar solicitud</button>
+
+    <div *ngIf="respuestaAyuda" class="respuesta">
+      <i class="bi bi-check-circle"></i> {{ respuestaAyuda }}
+    </div>
+  </section>
+
+    <!-- 🦶 Pie de página -->
+  <footer class="auth-footer">
+    <p>© 2025 Organiza tus Tareas. Todos los derechos reservados.</p>
+    <p class="footer-links">
+      <a routerLink="/terminos">Términos y Condiciones</a> |
+      <a routerLink="/privacidad">Política de Privacidad</a> |
+      <a routerLink="/contacto">Contacto</a>
+    </p>
+  </footer>
+
+</main>

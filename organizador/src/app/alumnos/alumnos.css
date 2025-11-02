@@ -1,0 +1,129 @@
+:root {
+  --main-bg: #1F2041;
+  --light-bg: #2c2d5a;
+  --text-light: #ffffff;
+  --accent: #4d6aff;
+  --success: #62e36b;
+  --danger: #ff6b6b;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.alumno-container {
+  min-height: 100vh;
+  background-color: var(--main-bg);
+  color: var(--text-light);
+  padding: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===== PERFIL ===== */
+.perfil {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.perfil h2 {
+  font-size: 1.8rem;
+}
+
+.cerrar-btn {
+  background-color: var(--accent);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cerrar-btn:hover {
+  background-color: #374bff;
+}
+
+/* ===== CALIFICACIONES ===== */
+.calificaciones h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.tabla {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--light-bg);
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fila.header {
+  background-color: var(--accent);
+  font-weight: bold;
+}
+
+.fila div {
+  padding: 6px 0;
+}
+
+.baja {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.alta {
+  color: var(--success);
+  font-weight: bold;
+}
+
+/* ===== AYUDA ===== */
+.ayuda {
+  background-color: var(--light-bg);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.ayuda h3 {
+  font-size: 1.3rem;
+}
+
+.ayuda textarea {
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  resize: none;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.enviar-btn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.enviar-btn:hover {
+  background-color: #374bff;
+}
+
+.respuesta {
+  margin-top: 15px;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
