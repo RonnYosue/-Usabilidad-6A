@@ -1,0 +1,53 @@
+<div class="buscar-container">
+  <div class="buscar-header">
+    <h1 class="page-title">🔍 Buscar Tareas</h1>
+    <p class="page-subtitle">Encuentra rápidamente tus tareas y trabajos</p>
+  </div>
+
+  <div class="search-box">
+    <div class="search-input-wrapper">
+      <span class="search-icon">🔎</span>
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        placeholder="Buscar por nombre de tarea o materia..."
+        name="searchTerm">
+      <button 
+        class="clear-btn" 
+        *ngIf="searchTerm"
+        (click)="limpiarBusqueda()">
+        ✕
+      </button>
+    </div>
+
+    <div class="filter-section">
+      <label class="filter-label">Filtrar por estado:</label>
+      <div class="filter-buttons">
+        <button 
+          class="filter-btn"
+          [class.active]="selectedFilter === 'todas'"
+          (click)="selectedFilter = 'todas'">
+          Todas
+        </button>
+        <button 
+          class="filter-btn"
+          [class.active]="selectedFilter === 'pendiente'"
+          (click)="selectedFilter = 'pendiente'">
+          Pendientes
+        </button>
+        <button 
+          class="filter-btn"
+          [class.active]="selectedFilter === 'completada'"
+          (click)="selectedFilter = 'completada'">
+          Completadas
+        </button>
+        <button 
+          class="filter-btn"
+          [class.active]="selectedFilter === 'atrasada'"
+          (click)="selectedFilter = 'atrasada'">
+          Atrasadas
+        </button>
+      </div>
+    </div>
+  </div>

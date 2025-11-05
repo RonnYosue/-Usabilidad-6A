@@ -1,5 +1,6 @@
-
-// administrador.component.ts
+// ============================================
+// administrador.ts - ACTUALIZADO
+// ============================================
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,11 +9,14 @@ import { Encabezado } from '../encabezado/encabezado';
 
 interface Estudiante {
   id: number;
-  nombre: string;
+  nombres: string;
+  apellidos: string;
+  nombreUsuario: string;
   email: string;
+  password: string;
+  carrera: string;
+  semestre: number;
   fechaRegistro: Date;
-  telefono?: string;
-  carrera?: string;
 }
 
 @Component({
@@ -27,18 +31,22 @@ export class AdministradorComponent implements OnInit {
   estudiantesFiltrados: Estudiante[] = [];
   nuevoEstudiante: Estudiante = { 
     id: 0, 
-    nombre: '', 
+    nombres: '', 
+    apellidos: '',
+    nombreUsuario: '',
     email: '', 
-    fechaRegistro: new Date(),
-    telefono: '',
-    carrera: ''
+    password: '',
+    carrera: '',
+    semestre: 1,
+    fechaRegistro: new Date()
   };
   editando: Estudiante | null = null;
   busqueda: string = '';
   mostrarFormulario: boolean = false;
-  ordenarPor: 'nombre' | 'email' | 'fecha' = 'nombre';
+  ordenarPor: 'nombres' | 'email' | 'fecha' = 'nombres';
   ordenAscendente: boolean = true;
   fechaActual: Date = new Date();
+  mostrarPassword: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -55,11 +63,25 @@ export class AdministradorComponent implements OnInit {
       }
 
       // Cargar estudiantes desde localStorage
-      const estudiantesGuardados = localStorage.getItem('estudiantes');
-      if (estudiantesGuardados) {
-        this.estudiantes = JSON.parse(estudiantesGuardados);
-      }
+      this.cargarEstudiantes();
       this.actualizarFiltro();
+    }
+  }
+
+  cargarEstudiantes(): void {
+    const estudiantesGuardados = localStorage.getItem('estudiantes');
+    if (estudiantesGuardados) {
+      try {
+        this.estudiantes = JSON.parse(estudiantesGuardados);
+        console.log('Estudiantes cargados:', this.estudiantes.length);
+      } catch (error) {
+        console.error('Error al cargar estudiantes:', error);
+        this.estudiantes = [];
+      }
+    } else {
+      // Si no hay estudiantes, crear un array vacío
+      this.estudiantes = [];
+      console.log('No hay estudiantes guardados');
     }
   }
 
@@ -70,9 +92,16 @@ export class AdministradorComponent implements OnInit {
     }
   }
 
+  togglePasswordVisibility() {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
+
   agregarEstudiante() {
-    if (!this.nuevoEstudiante.nombre || !this.nuevoEstudiante.email) {
-      alert('Por favor complete los campos obligatorios (Nombre y Email)');
+    // Validaciones
+    if (!this.nuevoEstudiante.nombres || !this.nuevoEstudiante.apellidos || 
+        !this.nuevoEstudiante.nombreUsuario || !this.nuevoEstudiante.email || 
+        !this.nuevoEstudiante.password || !this.nuevoEstudiante.carrera) {
+      alert('Por favor complete todos los campos obligatorios');
       return;
     }
 
@@ -83,6 +112,30 @@ export class AdministradorComponent implements OnInit {
       return;
     }
 
+    // Validar contraseña
+    if (this.nuevoEstudiante.password.length < 6) {
+      alert('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    // Validar semestre
+    if (this.nuevoEstudiante.semestre < 1 || this.nuevoEstudiante.semestre > 10) {
+      alert('El semestre debe estar entre 1 y 10');
+      return;
+    }
+
+    // Verificar si el nombre de usuario ya existe
+    if (this.estudiantes.some(e => e.nombreUsuario === this.nuevoEstudiante.nombreUsuario)) {
+      alert('El nombre de usuario ya está en uso');
+      return;
+    }
+
+    // Verificar si el email ya existe
+    if (this.estudiantes.some(e => e.email === this.nuevoEstudiante.email)) {
+      alert('El email ya está registrado');
+      return;
+    }
+
     const nuevo: Estudiante = { 
       ...this.nuevoEstudiante, 
       id: Date.now(),
@@ -90,6 +143,9 @@ export class AdministradorComponent implements OnInit {
     };
     
     this.estudiantes.push(nuevo);
+    console.log('Estudiante agregado:', nuevo);
+    console.log('Total estudiantes ahora:', this.estudiantes.length);
+    
     this.guardarEnLocalStorage();
     this.limpiarFormulario();
     this.mostrarFormulario = false;
@@ -101,12 +157,16 @@ export class AdministradorComponent implements OnInit {
   limpiarFormulario() {
     this.nuevoEstudiante = { 
       id: 0, 
-      nombre: '', 
+      nombres: '', 
+      apellidos: '',
+      nombreUsuario: '',
       email: '', 
-      fechaRegistro: new Date(),
-      telefono: '',
-      carrera: ''
+      password: '',
+      carrera: '',
+      semestre: 1,
+      fechaRegistro: new Date()
     };
+    this.mostrarPassword = false;
   }
 
   editarEstudiante(est: Estudiante) {
@@ -120,6 +180,24 @@ export class AdministradorComponent implements OnInit {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.editando.email)) {
       alert('Por favor ingrese un email válido');
+      return;
+    }
+
+    // Validar semestre
+    if (this.editando.semestre < 1 || this.editando.semestre > 10) {
+      alert('El semestre debe estar entre 1 y 10');
+      return;
+    }
+
+    // Verificar nombre de usuario único (excepto el actual)
+    if (this.estudiantes.some(e => e.nombreUsuario === this.editando!.nombreUsuario && e.id !== this.editando!.id)) {
+      alert('El nombre de usuario ya está en uso');
+      return;
+    }
+
+    // Verificar email único (excepto el actual)
+    if (this.estudiantes.some(e => e.email === this.editando!.email && e.id !== this.editando!.id)) {
+      alert('El email ya está registrado');
       return;
     }
 
@@ -145,20 +223,27 @@ export class AdministradorComponent implements OnInit {
   }
 
   buscarEstudiantes() {
-    if (!this.busqueda.trim()) {
+    console.log('Buscando:', this.busqueda);
+    console.log('Total estudiantes:', this.estudiantes.length);
+    
+    if (!this.busqueda || !this.busqueda.trim()) {
       this.estudiantesFiltrados = [...this.estudiantes];
+      console.log('Sin búsqueda, mostrando todos');
     } else {
-      const termino = this.busqueda.toLowerCase();
+      const termino = this.busqueda.toLowerCase().trim();
       this.estudiantesFiltrados = this.estudiantes.filter(e => 
-        e.nombre.toLowerCase().includes(termino) ||
-        e.email.toLowerCase().includes(termino) ||
-        e.carrera?.toLowerCase().includes(termino)
+        (e.nombres && e.nombres.toLowerCase().includes(termino)) ||
+        (e.apellidos && e.apellidos.toLowerCase().includes(termino)) ||
+        (e.nombreUsuario && e.nombreUsuario.toLowerCase().includes(termino)) ||
+        (e.email && e.email.toLowerCase().includes(termino)) ||
+        (e.carrera && e.carrera.toLowerCase().includes(termino))
       );
+      console.log('Resultados filtrados:', this.estudiantesFiltrados.length);
     }
     this.aplicarOrden();
   }
 
-  ordenarTabla(campo: 'nombre' | 'email' | 'fecha') {
+  ordenarTabla(campo: 'nombres' | 'email' | 'fecha') {
     if (this.ordenarPor === campo) {
       this.ordenAscendente = !this.ordenAscendente;
     } else {
@@ -173,8 +258,8 @@ export class AdministradorComponent implements OnInit {
       let comparacion = 0;
       
       switch(this.ordenarPor) {
-        case 'nombre':
-          comparacion = a.nombre.localeCompare(b.nombre);
+        case 'nombres':
+          comparacion = (a.nombres + ' ' + a.apellidos).localeCompare(b.nombres + ' ' + b.apellidos);
           break;
         case 'email':
           comparacion = a.email.localeCompare(b.email);
@@ -199,12 +284,14 @@ export class AdministradorComponent implements OnInit {
   }
 
   exportarCSV() {
-    const headers = ['Nombre', 'Email', 'Teléfono', 'Carrera', 'Fecha de Registro'];
+    const headers = ['Nombres', 'Apellidos', 'Usuario', 'Email', 'Carrera', 'Semestre', 'Fecha de Registro'];
     const rows = this.estudiantes.map(e => [
-      e.nombre,
+      e.nombres,
+      e.apellidos,
+      e.nombreUsuario,
       e.email,
-      e.telefono || '',
-      e.carrera || '',
+      e.carrera,
+      e.semestre.toString(),
       new Date(e.fechaRegistro).toLocaleDateString()
     ]);
 
@@ -219,5 +306,49 @@ export class AdministradorComponent implements OnInit {
     a.href = url;
     a.download = `estudiantes_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
+  }
+
+  // Método para agregar datos de prueba (útil para testing)
+  agregarDatosPrueba() {
+    const datosPrueba: Estudiante[] = [
+      {
+        id: Date.now() + 1,
+        nombres: 'Juan Carlos',
+        apellidos: 'Pérez García',
+        nombreUsuario: 'jperez',
+        email: 'juan.perez@universidad.edu',
+        password: '123456',
+        carrera: 'Ingeniería en Sistemas',
+        semestre: 5,
+        fechaRegistro: new Date()
+      },
+      {
+        id: Date.now() + 2,
+        nombres: 'María José',
+        apellidos: 'González López',
+        nombreUsuario: 'mgonzalez',
+        email: 'maria.gonzalez@universidad.edu',
+        password: '123456',
+        carrera: 'Medicina',
+        semestre: 3,
+        fechaRegistro: new Date()
+      },
+      {
+        id: Date.now() + 3,
+        nombres: 'Pedro Luis',
+        apellidos: 'Martínez Ruiz',
+        nombreUsuario: 'pmartinez',
+        email: 'pedro.martinez@universidad.edu',
+        password: '123456',
+        carrera: 'Derecho',
+        semestre: 7,
+        fechaRegistro: new Date()
+      }
+    ];
+
+    this.estudiantes.push(...datosPrueba);
+    this.guardarEnLocalStorage();
+    this.actualizarFiltro();
+    alert('Se agregaron 3 estudiantes de prueba');
   }
 }

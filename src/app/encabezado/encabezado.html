@@ -1,19 +1,31 @@
 <header class="encabezado">
+  <!-- Logo y título a la izquierda -->
   <div class="logo">
     <img src="/logo.png" alt="Logo" />
-    <h1>Organizador de Tareas</h1>
+    <i class="bi bi-box-arrow-right"></i>
+    <h1>{{ t('organizador') }}</h1>
   </div>
 
-  <nav class="nav">
-    <button class="nav-btn" (click)="toggleMenu()">
-      <i class="bi bi-list"></i> {{ t('menu') }}
-    </button>
+  <!-- Todos los botones a la derecha -->
+  <div class="header-actions">
+    <!-- Botón de Menú con menú lateral --> 
+    <div class="nav-menu-container">
+      <button class="nav-btn" (click)="toggleMenu()">
+        <i class="bi bi-list"></i> {{ t('menu') }}
+      </button>
 
+      <app-menu class="menu" [class.open]="menuOpen"  [userType]="userType"></app-menu>
+
+      
+    </div>
+
+    <!-- Otros botones de navegación -->
     <button class="nav-btn" (click)="openProfile()">
       <i class="bi bi-person-circle"></i> {{ t('perfil') }}
     </button>
 
-    <select [(ngModel)]="currentLang" (change)="changeLanguage($event)" class="nav-select">
+    <select [(ngModel)]="currentLang" (ngModelChange)="changeLanguage($event)" class="nav-select">
+
       <option value="es">Español</option>
       <option value="en">English</option>
     </select>
@@ -21,5 +33,5 @@
     <button class="nav-btn logout" (click)="logout()">
       <i class="bi bi-box-arrow-right"></i> {{ t('cerrarSesion') }}
     </button>
-  </nav>
+  </div>
 </header>

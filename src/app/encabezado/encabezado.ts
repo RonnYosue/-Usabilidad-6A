@@ -1,86 +1,91 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PreferenciasService } from '../services/preferencias.service';
 import { IdiomaService } from '../services/idioma.service';
+import { MenuComponent } from '../menu/menu';
 
 @Component({
   selector: 'app-encabezado',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MenuComponent],
   templateUrl: './encabezado.html',
   styleUrls: ['./encabezado.css']
 })
 export class Encabezado implements OnInit {
-  currentLang = 'es';
+  currentLang: string | null = null;
   menuOpen = false;
-  darkMode = false;
+  userType: 'admin' | 'estudiante' = 'estudiante'; // 👈 Tipo de usuario actual
+
+  textos: any = {
+    es: {
+      menu: 'Menú',
+      perfil: 'Perfil',
+      cerrarSesion: 'Cerrar sesión',
+      organizador: 'Organizador de Tareas'
+    },
+    en: {
+      menu: 'Menu',
+      perfil: 'Profile',
+      cerrarSesion: 'Logout',
+      organizador: 'Task Organizer'
+    }
+  };
 
   constructor(
     private preferencias: PreferenciasService,
-    private idioma: IdiomaService
+    private idioma: IdiomaService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // Inicializamos idioma desde el servicio
-    this.currentLang = this.idioma.currentLang;
+    // ⚠️ Verificar si estamos en entorno de navegador
+    const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
 
-    // Suscribirse a cambios de idioma global
+    // ✅ Cargar idioma desde el servicio
+    this.currentLang = this.idioma.currentLang;
     this.idioma.currentLang$.subscribe(lang => {
       this.currentLang = lang;
+      this.cdr.detectChanges();
     });
 
+    // ✅ Determinar tipo de usuario solo si estamos en navegador
+    if (isBrowser) {
+      const tipo = localStorage.getItem('tipoUsuario');
+      if (tipo === 'admin') {
+        this.userType = 'admin';
+      } else {
+        this.userType = 'estudiante';
+      }
+    } else {
+      console.warn('[Encabezado] Ejecutando fuera del navegador, usando valor por defecto.');
+      this.userType = 'estudiante';
+    }
   }
 
-  // Mostrar / ocultar menú
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
-    console.log('Menú', this.menuOpen ? 'abierto' : 'cerrado');
   }
 
-  // Activar / desactivar modo oscuro
-  toggleDarkMode() {
-    this.preferencias.toggleDarkMode();
-  }
-
-  // Abrir perfil
   openProfile() {
-    console.log('Abrir perfil');
-    // this.router.navigate(['/perfil']);
+    window.location.href = '/perfil';
   }
 
-  // Cambiar idioma
-  changeLanguage(event: Event) {
-    const select = event.target as HTMLSelectElement;
-    this.idioma.changeLang(select.value);
+  changeLanguage(lang: string) {
+    this.idioma.changeLang(lang);
+    this.currentLang = lang;
   }
 
-  // Cerrar sesión
   logout() {
-    console.log('Cerrando sesión...');
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.removeItem('usuarioActivo');
+      localStorage.removeItem('tipoUsuario');
+      window.location.href = '/login';
     }
-    window.location.href = '/login';
   }
 
-  // Función para obtener texto según idioma
-  
   t(key: string) {
-    const textos: any = {
-      es: {
-        menu: 'Menú',
-        modoOscuro: 'Modo oscuro',
-        perfil: 'Perfil',
-        cerrarSesion: 'Cerrar sesión'
-      },
-      en: {
-        menu: 'Menu',
-        modoOscuro: 'Dark mode',
-        perfil: 'Profile',
-        cerrarSesion: 'Logout'
-      }
-    };
-    return textos[this.currentLang][key];
+    if (!this.currentLang) return '';
+    return this.textos[this.currentLang][key];
   }
 }

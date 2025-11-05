@@ -6,6 +6,7 @@ import { StatCardComponent } from '../estadisticas/estadisticas';
 import { TaskCardComponent } from '../tareas/tareas';
 import { Ayuda } from '../ayuda/ayuda';
 import { Encabezado } from '../encabezado/encabezado';
+import { MenuComponent } from '../menu/menu';
 
 interface Task {
   id: number;
@@ -33,7 +34,8 @@ interface HelpRequest {
     StatCardComponent,
     TaskCardComponent,
     Ayuda,
-    Encabezado
+    Encabezado,
+    MenuComponent
   ],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.css']
@@ -41,6 +43,7 @@ interface HelpRequest {
 export class AlumnosComponent implements OnInit {
   selectedTask: Task | null = null;
   showHelpModal = false;
+  
   
   stats = {
     promedio: 85,
