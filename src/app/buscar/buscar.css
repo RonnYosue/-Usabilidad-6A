@@ -3,7 +3,9 @@
   min-height: 100vh;
   padding: 2rem;
   padding-top: 90px;
-  margin-left: 280px;
+  margin-left: 0; /* eliminar margen lateral */
+  width: 100%; /* ocupar todo el ancho */
+  box-sizing: border-box; /* asegurarse de que el padding no aumente el ancho */
 }
 
 .buscar-header {
@@ -216,9 +218,14 @@
   margin: 0;
 }
 
+
+
+/* Ajustes responsivos */
 @media (max-width: 1024px) {
   .buscar-container {
-    margin-left: 80px;
+    margin-left: 0; /* eliminar margen lateral en tablets */
+    padding: 1.5rem;
+    padding-top: 90px;
   }
 }
 
@@ -228,6 +235,7 @@
     padding: 1rem;
     padding-top: 90px;
   }
+
 
   .results-grid {
     grid-template-columns: 1fr;

@@ -8,6 +8,9 @@ import { BuscarComponent } from './buscar/buscar';
 import { AyuditaComponent } from './ayudita/ayudita';
 import { TerminosComponent } from './terminos/terminos';
 import { PrivacidadComponent } from './privacidad/privacidad';
+import { MateriasComponent } from './materias/materias';
+import { TareasComponent } from './tareitas/tareitas';
+import { CalendarioComponent } from './calendario/calendario';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,4 +23,7 @@ export const routes: Routes = [
   { path: 'ayudita', component: AyuditaComponent },
   { path: 'terminos', component: TerminosComponent },
   { path: 'privacidad', component: PrivacidadComponent },
+  { path: 'materias', component: MateriasComponent },
+  { path: 'tareas', component: TareasComponent },
+  { path: 'calendario', component: CalendarioComponent },
 ];

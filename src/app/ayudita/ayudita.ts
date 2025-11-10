@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Encabezado } from '../encabezado/encabezado';
+import { Footer } from '../footer/footer';
 
 interface PreguntaFrecuente {
   pregunta: string;
@@ -12,7 +13,7 @@ interface PreguntaFrecuente {
 @Component({
   selector: 'app-ayudita',
   standalone: true,
-  imports: [CommonModule, FormsModule, Encabezado],
+  imports: [CommonModule, FormsModule, Encabezado, Footer],
   templateUrl: './ayudita.html',
   styleUrls: ['./ayudita.css']
 })
@@ -24,7 +25,7 @@ export class AyuditaComponent {
   preguntasFrecuentes: PreguntaFrecuente[] = [
     {
       pregunta: '¿Cómo puedo agregar una nueva tarea?',
-      respuesta: 'Para agregar una nueva tarea, ve a la sección "Inicio" y haz clic en el botón "+ Nueva Tarea". Completa los campos requeridos como nombre, materia, fecha de entrega y prioridad.',
+      respuesta: 'Para agregar una nueva tarea, ve a la sección "Tareas" y haz clic en el botón "+ Nueva Tarea". Completa los campos requeridos como nombre, materia, fecha de entrega y prioridad.',
       expandido: false
     },
     {

@@ -1,13 +1,37 @@
-.privacidad-container {
+.privacidad-background {
   background-color: #1F2041;
+
+  /* espacio para el encabezado */
+  padding-top: 70px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem; /* margen inferior */
+
   min-height: 100vh;
-  padding: 2rem;
-  padding-top: 90px;
-  margin-left: 280px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column; /* para footer al final */
+  justify-content: space-between; /* empuja footer al final */
+  box-sizing: border-box;
 }
+
+.privacidad-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* cambiar de center a stretch */
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
 
 .privacidad-header {
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra horizontalmente */
+  text-align: center;  /* asegura que el texto esté centrado */
 }
 
 .page-title {
@@ -19,8 +43,9 @@
 
 .page-subtitle {
   color: #9CA3AF;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin: 0;
+  text-align: center;
 }
 
 .privacidad-content {
@@ -28,7 +53,7 @@
   border-radius: 1rem;
   padding: 2.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
+  width: 100%;
 }
 
 .intro-section {
@@ -183,7 +208,7 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .privacidad-container {
-    margin-left: 80px;
+    margin-left: 0;
   }
 
   .security-grid {
@@ -193,7 +218,6 @@
 
 @media (max-width: 768px) {
   .privacidad-container {
-    margin-left: 0;
     padding: 1rem;
     padding-top: 90px;
   }

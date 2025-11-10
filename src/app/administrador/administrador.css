@@ -667,6 +667,58 @@
   text-decoration: underline;
 }
 
+/* 🔹 Contenedor del campo de contraseña en edición */
+.password-edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* 🔹 Envoltorio del input y el botón 👁️ */
+.password-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  padding: 4px 8px;
+  transition: border-color 0.2s ease;
+}
+
+/* 🔹 Input de la contraseña */
+.password-input-wrapper input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 6px;
+  outline: none;
+}
+
+/* 🔹 Botón del ojito */
+.toggle-password {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 4px;
+}
+
+/* 🔹 Al pasar el mouse por el ojito */
+.toggle-password:hover {
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* 🔹 Cuando la contraseña está visible (cambia color del ojito) */
+.mostrar-password-activo {
+  color: #007bff;
+}
+
+
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
   .admin-container {

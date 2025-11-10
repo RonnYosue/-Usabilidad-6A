@@ -238,6 +238,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // 2️⃣ Buscar estudiantes registrados
     const usuariosGuardados = localStorage.getItem('usuarios');
     const usuarios = usuariosGuardados ? JSON.parse(usuariosGuardados) : [];
+    
 
     // Debug: mostrar usuarios en consola
     console.log('=== DEBUG LOGIN ===');

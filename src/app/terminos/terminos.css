@@ -1,34 +1,82 @@
-.terminos-container {
-  background-color: #1F2041;
+/* Contenedor principal: ocupa toda la pantalla, columna */
+.terminos-background {
+  display: flex;
+  flex-direction: column; /* columna para que footer quede al final */
   min-height: 100vh;
+  width: 100%;
+  background-color: #1F2041;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* Contenido principal: ocupa el espacio disponible */
+.terminos-container {
+  flex: 1; /* esto hace que se estire y empuje el footer hacia abajo */
   padding: 2rem;
   padding-top: 90px;
-  margin-left: 280px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.terminos-header {
-  margin-bottom: 2rem;
+/* Footer interno de términos */
+.terminos-footer {
+  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  border-radius: 0.75rem;
+  padding: 1.5rem 2rem; /* un poco más de padding horizontal */
+  margin-top: 2rem;
+  border-left: 4px solid #1F2041;
+  width: 100%;
+  text-align: center; /* centrar horizontal */
+  display: flex;       /* flex para centrar vertical */
+  align-items: center; /* centrar vertical */
+  justify-content: center; /* centrar horizontal (por si flex horizontal cambia) */
+  box-sizing: border-box;
 }
 
-.page-title {
-  color: white;
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0 0 0.5rem 0;
+.footer-text {
+  font-size: 0.95rem;
+  color: #1F2937;
+  font-weight: 500;
+  margin: 0;
+}
+
+
+/* Footer general del sitio */
+app-footer {
+  width: 100%;
+}
+
+
+.terminos-header { 
+  margin-bottom: 2rem; 
+}
+
+.page-title { 
+  color: white; 
+  font-size: 2rem; 
+  font-weight: bold; 
+  margin: 0 0 0.5rem 0; 
 }
 
 .page-subtitle {
-  color: #9CA3AF;
-  font-size: 0.875rem;
-  margin: 0;
+  color: #9CA3AF; 
+  font-size:1rem; 
+  margin: 0; 
+  text-align: center;
 }
 
 .terminos-content {
   background-color: white;
   border-radius: 1rem;
   padding: 2.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
+  box-shadow: 0 4px 6px rgb(255, 255, 255);
+  width: 100%;
 }
 
 .terminos-section {

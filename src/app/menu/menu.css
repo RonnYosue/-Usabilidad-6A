@@ -1,46 +1,51 @@
 .menu-lateral {
   position: fixed;
+  top: 70px; /* debajo del encabezado */
   left: 0;
-  top: 70px;
-  width: 280px;
+  width: 260px;
   height: calc(100vh - 70px);
   background-color: #ffffff;
   border-right: 1px solid #E5E7EB;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-  z-index: 900;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 }
 
+/* ✅ Cuando Angular pone [class.hidden]="!isOpen" → se quita hidden al abrir */
+.menu-lateral:not(.hidden) {
+  transform: translateX(0);
+}
+
+/* ===== CONTENIDO ===== */
 .menu-nav {
   flex: 1;
   padding: 1.5rem 0;
   overflow-y: auto;
 }
 
+/* Scroll personalizado */
 .menu-nav::-webkit-scrollbar {
   width: 6px;
 }
-
-.menu-nav::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
 .menu-nav::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #ccc;
   border-radius: 3px;
 }
-
 .menu-nav::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #999;
 }
 
+/* ===== PIE DEL MENÚ ===== */
 .menu-footer {
   padding: 1rem;
   border-top: 1px solid #E5E7EB;
   background-color: #F9FAFB;
 }
 
+/* ===== INFO DE USUARIO ===== */
 .user-info {
   display: flex;
   align-items: center;
@@ -64,6 +69,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
+  color: #fff;
 }
 
 .user-details {
@@ -83,23 +89,21 @@
   margin: 0;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .menu-lateral {
-    width: 80px;
-  }
-  
-  .user-details {
-    display: none;
+    width: 220px;
   }
 }
 
 @media (max-width: 768px) {
   .menu-lateral {
+    top: 0;
+    height: 100vh;
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
   }
-  
-  .menu-lateral.open {
+
+  .menu-lateral:not(.hidden) {
     transform: translateX(0);
   }
 }

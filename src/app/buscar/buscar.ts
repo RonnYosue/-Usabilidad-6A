@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Encabezado } from '../encabezado/encabezado';
+import { Footer } from '../footer/footer';
 
 interface Tarea {
   id: number;
@@ -13,7 +15,7 @@ interface Tarea {
 @Component({
   selector: 'app-buscar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Encabezado, Footer],
   templateUrl: './buscar.html',
   styleUrls: ['./buscar.css']
 })

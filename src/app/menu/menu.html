@@ -1,4 +1,4 @@
-<aside class="menu-lateral">
+<aside class="menu-lateral" [class.hidden]="!isOpen">
   <nav class="menu-nav">
     <app-menu-item
       *ngFor="let item of menuItems"

@@ -18,8 +18,8 @@
           </svg>
         </div>
         <div class="stat-content">
-          <h3>{{ estudiantes.length }}</h3>
-          <p>Total Estudiantes</p>
+          <h3>{{ usuarios.length }}</h3>
+          <p>Total Usuarios</p>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
           </svg>
         </div>
         <div class="stat-content">
-          <h3>{{ estudiantesFiltrados.length }}</h3>
+          <h3>{{ usuariosFiltrados.length }}</h3>
           <p>Resultados Filtrados</p>
         </div>
       </div>
@@ -63,7 +63,7 @@
           class="search-input"
           placeholder="Buscar por nombre, usuario, email o carrera..."
           [(ngModel)]="busqueda"
-          (ngModelChange)="buscarEstudiantes()"
+          (ngModelChange)="buscarUsuarios()"
         />
       </div>
       <button class="btn-add" (click)="toggleFormulario()">
@@ -71,7 +71,7 @@
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        {{ mostrarFormulario ? 'Cancelar' : 'Nuevo Estudiante' }}
+        {{ mostrarFormulario ? 'Cancelar' : 'Nuevo Usuario' }}
       </button>
       <button class="btn-export" (click)="exportarCSV()" title="Exportar a CSV">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -86,7 +86,7 @@
     <!-- Formulario ACTUALIZADO -->
     <div class="form-container" *ngIf="mostrarFormulario">
       <div class="form-header">
-        <h3>🎓 Agregar Nuevo Estudiante</h3>
+        <h3>🎓 Agregar Nuevo Usuario</h3>
         <button class="btn-close" (click)="toggleFormulario()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"/>
@@ -95,14 +95,14 @@
         </button>
       </div>
       
-      <form (submit)="agregarEstudiante(); $event.preventDefault()" class="form-grid">
+      <form (submit)="agregarUsuario(); $event.preventDefault()" class="form-grid">
         <!-- Nombres -->
         <div class="form-group">
           <label>Nombres *</label>
           <input
             type="text"
             placeholder="Ej: Juan Carlos"
-            [(ngModel)]="nuevoEstudiante.nombres"
+            [(ngModel)]="nuevoUsuario.nombres"
             name="nombres"
             required
           />
@@ -114,7 +114,7 @@
           <input
             type="text"
             placeholder="Ej: Pérez García"
-            [(ngModel)]="nuevoEstudiante.apellidos"
+            [(ngModel)]="nuevoUsuario.apellidos"
             name="apellidos"
             required
           />
@@ -126,7 +126,7 @@
           <input
             type="text"
             placeholder="Ej: jperez"
-            [(ngModel)]="nuevoEstudiante.nombreUsuario"
+            [(ngModel)]="nuevoUsuario.nombreUsuario"
             name="nombreUsuario"
             required
           />
@@ -138,7 +138,7 @@
           <input
             type="email"
             placeholder="Ej: juan.perez@ejemplo.com"
-            [(ngModel)]="nuevoEstudiante.email"
+            [(ngModel)]="nuevoUsuario.email"
             name="email"
             required
           />
@@ -151,7 +151,7 @@
             <input
               [type]="mostrarPassword ? 'text' : 'password'"
               placeholder="Ingrese una contraseña segura"
-              [(ngModel)]="nuevoEstudiante.password"
+              [(ngModel)]="nuevoUsuario.password"
               name="password"
               minlength="6"
               required
@@ -169,7 +169,7 @@
         <div class="form-group">
           <label>Carrera *</label>
           <select
-            [(ngModel)]="nuevoEstudiante.carrera"
+            [(ngModel)]="nuevoUsuario.carrera"
             name="carrera"
             required>
             <option value="">Seleccione una carrera</option>
@@ -192,7 +192,7 @@
           <input
             type="number"
             placeholder="1-10"
-            [(ngModel)]="nuevoEstudiante.semestre"
+            [(ngModel)]="nuevoUsuario.semestre"
             name="semestre"
             min="1"
             max="10"
@@ -209,7 +209,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            Guardar Estudiante
+            Guardar Usuario
           </button>
         </div>
       </form>
@@ -217,7 +217,7 @@
 
     <!-- Tabla ACTUALIZADA -->
     <div class="table-container">
-      <table class="tabla" *ngIf="estudiantesFiltrados.length > 0; else sinDatos">
+      <table class="tabla" *ngIf="usuariosFiltrados.length > 0; else sinDatos">
         <thead>
           <tr>
             <th (click)="ordenarTabla('nombres')" class="sortable">
@@ -245,16 +245,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let e of estudiantesFiltrados" [class.editing]="editando?.id === e.id">
+          <tr *ngFor="let u of usuariosFiltrados" [class.editing]="editando?.id === u.id">
             <!-- Nombre Completo -->
             <td>
-              <div class="cell-content" *ngIf="editando?.id !== e.id">
-                <div class="avatar">{{ e.nombres.charAt(0).toUpperCase() }}{{ e.apellidos.charAt(0).toUpperCase() }}</div>
+              <div class="cell-content" *ngIf="editando?.id !== u.id">
+                <div class="avatar">{{ u.nombres.charAt(0).toUpperCase() }}{{ u.apellidos.charAt(0).toUpperCase() }}</div>
                 <div class="nombre-completo">
-                  <span class="nombre-principal">{{ e.nombres }} {{ e.apellidos }}</span>
+                  <span class="nombre-principal">{{ u.nombres }} {{ u.apellidos }}</span>
                 </div>
               </div>
-              <div *ngIf="editando?.id === e.id" class="edit-name-group">
+              <div *ngIf="editando?.id === u.id" class="edit-name-group">
                 <input [(ngModel)]="editando!.nombres" class="edit-input" placeholder="Nombres" />
                 <input [(ngModel)]="editando!.apellidos" class="edit-input" placeholder="Apellidos" />
               </div>
@@ -262,20 +262,20 @@
 
             <!-- Usuario -->
             <td>
-              <span *ngIf="editando?.id !== e.id" class="username-badge">@{{ e.nombreUsuario }}</span>
-              <input *ngIf="editando?.id === e.id" [(ngModel)]="editando!.nombreUsuario" class="edit-input" />
+              <span *ngIf="editando?.id !== u.id" class="username-badge">@{{ u.nombreUsuario }}</span>
+              <input *ngIf="editando?.id === u.id" [(ngModel)]="editando!.nombreUsuario" class="edit-input" />
             </td>
 
             <!-- Email -->
             <td>
-              <span *ngIf="editando?.id !== e.id" class="email-text">{{ e.email }}</span>
-              <input *ngIf="editando?.id === e.id" [(ngModel)]="editando!.email" type="email" class="edit-input" />
+              <span *ngIf="editando?.id !== u.id" class="email-text">{{ u.email }}</span>
+              <input *ngIf="editando?.id === u.id" [(ngModel)]="editando!.email" type="email" class="edit-input" />
             </td>
 
             <!-- Carrera -->
             <td>
-              <span *ngIf="editando?.id !== e.id" class="carrera-badge">{{ e.carrera }}</span>
-              <select *ngIf="editando?.id === e.id" [(ngModel)]="editando!.carrera" class="edit-select">
+              <span *ngIf="editando?.id !== u.id" class="carrera-badge">{{ u.carrera }}</span>
+              <select *ngIf="editando?.id === u.id" [(ngModel)]="editando!.carrera" class="edit-select">
                 <option value="Ingeniería en Sistemas">Ingeniería en Sistemas</option>
                 <option value="Ingeniería Civil">Ingeniería Civil</option>
                 <option value="Ingeniería Industrial">Ingeniería Industrial</option>
@@ -291,36 +291,56 @@
 
             <!-- Semestre -->
             <td>
-              <span *ngIf="editando?.id !== e.id" class="semestre-badge">{{ e.semestre }}° Semestre</span>
-              <input *ngIf="editando?.id === e.id" [(ngModel)]="editando!.semestre" type="number" min="1" max="10" class="edit-input" />
+              <span *ngIf="editando?.id !== u.id" class="semestre-badge">{{ u.semestre }}° Semestre</span>
+              <input *ngIf="editando?.id === u.id" [(ngModel)]="editando!.semestre" type="number" min="1" max="10" class="edit-input" />
             </td>
 
             <!-- Fecha -->
             <td>
-              <span class="fecha-text">{{ e.fechaRegistro | date: 'dd/MM/yyyy' }}</span>
+              <span class="fecha-text">{{ u.fechaRegistro | date: 'dd/MM/yyyy' }}</span>
+            </td>
+
+            <!-- Contraseña -->
+            <td>
+              <div *ngIf="editando" class="password-edit-container">
+                <label>Contraseña nueva (opcional):</label>
+                <div class="password-input-wrapper">
+                  <input
+                    [type]="mostrarPasswordEdicion ? 'text' : 'password'"
+                    [(ngModel)]="editandoPasswordNueva"
+                    placeholder="Opcional"
+                  />
+                  <button 
+                    type="button" 
+                    class="toggle-password"
+                    (click)="togglePasswordEdicion()">
+                    {{ mostrarPasswordEdicion ? '👁️‍🗨️' : '👁️‍🗨️' }}
+                  </button>
+                </div>
+              </div>
             </td>
 
             <!-- Acciones -->
             <td class="actions-cell">
               <div class="action-buttons">
-                <button *ngIf="editando?.id !== e.id" (click)="editarEstudiante(e)" class="btn-icon btn-edit" title="Editar">
+                <button *ngIf="editando?.id !== u.id" (click)="editarUsuario(u)" class="btn-icon btn-edit" title="Editar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                   </svg>
                 </button>
-                <button *ngIf="editando?.id === e.id" (click)="guardarEdicion()" class="btn-icon btn-save" title="Guardar">
+                <button *ngIf="editando?.id === u.id" (click)="guardarEdicion()" class="btn-icon btn-save" title="Guardar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 </button>
-                <button *ngIf="editando?.id === e.id" (click)="cancelarEdicion()" class="btn-icon btn-cancel" title="Cancelar">
+                <button *ngIf="editando?.id === u.id" (click)="cancelarEdicion()" class="btn-icon btn-cancel" title="Cancelar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="18" y1="6" x2="6" y2="18"/>
                     <line x1="6" y1="6" x2="18" y2="18"/>
                   </svg>
                 </button>
-                <button (click)="eliminarEstudiante(e.id)" class="btn-icon btn-delete" title="Eliminar">
+                <button (click)="eliminarUsuario(u.id)" class="btn-icon btn-delete" title="Eliminar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="3 6 5 6 21 6"/>
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -338,20 +358,10 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <h3>No hay estudiantes registrados</h3>
-          <p>Comienza agregando tu primer estudiante usando el botón "Nuevo Estudiante"</p>
+          <h3>No hay usuarios registrados</h3>
+          <p>Comienza agregando tu primer usuario usando el botón "Nuevo Usuario".</p>
         </div>
       </ng-template>
     </div>
   </div>
-
-  <!-- Pie de página -->
-  <footer class="auth-footer">
-    <p>© 2025 Organiza tus Tareas. Todos los derechos reservados.</p>
-    <p class="footer-links">
-      <a routerLink="/terminos">Términos y Condiciones</a> |
-      <a routerLink="/privacidad">Política de Privacidad</a> |
-      <a routerLink="/contacto">Contacto</a>
-    </p>
-  </footer>
 </div>

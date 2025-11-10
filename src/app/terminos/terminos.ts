@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Encabezado } from '../encabezado/encabezado';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-terminos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Encabezado, Footer],
   templateUrl: './terminos.html',
   styleUrls: ['./terminos.css']
 })

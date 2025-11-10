@@ -1,13 +1,11 @@
-// ============================================
-// administrador.ts - ACTUALIZADO
-// ============================================
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 import { Encabezado } from '../encabezado/encabezado';
 
-interface Estudiante {
+interface Usuario {
   id: number;
   nombres: string;
   apellidos: string;
@@ -17,6 +15,7 @@ interface Estudiante {
   carrera: string;
   semestre: number;
   fechaRegistro: Date;
+  rol?: string; // opcional por si quieres distinguir admin/estudiante
 }
 
 @Component({
@@ -27,9 +26,9 @@ interface Estudiante {
   styleUrls: ['./administrador.css']
 })
 export class AdministradorComponent implements OnInit {
-  estudiantes: Estudiante[] = [];
-  estudiantesFiltrados: Estudiante[] = [];
-  nuevoEstudiante: Estudiante = { 
+  usuarios: Usuario[] = [];
+  usuariosFiltrados: Usuario[] = [];
+  nuevoUsuario: Usuario = { 
     id: 0, 
     nombres: '', 
     apellidos: '',
@@ -38,17 +37,21 @@ export class AdministradorComponent implements OnInit {
     password: '',
     carrera: '',
     semestre: 1,
-    fechaRegistro: new Date()
+    fechaRegistro: new Date(),
+    rol: 'estudiante'
   };
-  editando: Estudiante | null = null;
+  editando: Usuario | null = null;
   busqueda: string = '';
   mostrarFormulario: boolean = false;
   ordenarPor: 'nombres' | 'email' | 'fecha' = 'nombres';
   ordenAscendente: boolean = true;
   fechaActual: Date = new Date();
   mostrarPassword: boolean = false;
+  editandoPasswordNueva: string = '';
+  mostrarPasswordEdicion: boolean = false;
 
-  constructor(private router: Router) {}
+
+  constructor(private router: Router, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
@@ -62,26 +65,25 @@ export class AdministradorComponent implements OnInit {
         return;
       }
 
-      // Cargar estudiantes desde localStorage
-      this.cargarEstudiantes();
+      // Cargar usuarios desde localStorage
+      this.cargarUsuarios();
       this.actualizarFiltro();
     }
   }
 
-  cargarEstudiantes(): void {
-    const estudiantesGuardados = localStorage.getItem('estudiantes');
-    if (estudiantesGuardados) {
+  cargarUsuarios(): void {
+    const usuariosGuardados = localStorage.getItem('usuarios');
+    if (usuariosGuardados) {
       try {
-        this.estudiantes = JSON.parse(estudiantesGuardados);
-        console.log('Estudiantes cargados:', this.estudiantes.length);
+        this.usuarios = JSON.parse(usuariosGuardados);
+        console.log('Usuarios cargados:', this.usuarios.length);
       } catch (error) {
-        console.error('Error al cargar estudiantes:', error);
-        this.estudiantes = [];
+        console.error('Error al cargar usuarios:', error);
+        this.usuarios = [];
       }
     } else {
-      // Si no hay estudiantes, crear un array vacío
-      this.estudiantes = [];
-      console.log('No hay estudiantes guardados');
+      this.usuarios = [];
+      console.log('No hay usuarios guardados');
     }
   }
 
@@ -96,66 +98,65 @@ export class AdministradorComponent implements OnInit {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
-  agregarEstudiante() {
-    // Validaciones
-    if (!this.nuevoEstudiante.nombres || !this.nuevoEstudiante.apellidos || 
-        !this.nuevoEstudiante.nombreUsuario || !this.nuevoEstudiante.email || 
-        !this.nuevoEstudiante.password || !this.nuevoEstudiante.carrera) {
+  togglePasswordEdicion() {
+    this.mostrarPasswordEdicion = !this.mostrarPasswordEdicion;
+  }
+
+  agregarUsuario() {
+    if (!this.nuevoUsuario.nombres || !this.nuevoUsuario.apellidos || 
+        !this.nuevoUsuario.nombreUsuario || !this.nuevoUsuario.email || 
+        !this.nuevoUsuario.password || !this.nuevoUsuario.carrera) {
       alert('Por favor complete todos los campos obligatorios');
       return;
     }
 
-    // Validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.nuevoEstudiante.email)) {
+    if (!emailRegex.test(this.nuevoUsuario.email)) {
       alert('Por favor ingrese un email válido');
       return;
     }
 
-    // Validar contraseña
-    if (this.nuevoEstudiante.password.length < 6) {
+    if (this.nuevoUsuario.password.length < 6) {
       alert('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
-    // Validar semestre
-    if (this.nuevoEstudiante.semestre < 1 || this.nuevoEstudiante.semestre > 10) {
+    if (this.nuevoUsuario.semestre < 1 || this.nuevoUsuario.semestre > 10) {
       alert('El semestre debe estar entre 1 y 10');
       return;
     }
 
-    // Verificar si el nombre de usuario ya existe
-    if (this.estudiantes.some(e => e.nombreUsuario === this.nuevoEstudiante.nombreUsuario)) {
+    if (this.usuarios.some(u => u.nombreUsuario === this.nuevoUsuario.nombreUsuario)) {
       alert('El nombre de usuario ya está en uso');
       return;
     }
 
-    // Verificar si el email ya existe
-    if (this.estudiantes.some(e => e.email === this.nuevoEstudiante.email)) {
+    if (this.usuarios.some(u => u.email === this.nuevoUsuario.email)) {
       alert('El email ya está registrado');
       return;
     }
 
-    const nuevo: Estudiante = { 
-      ...this.nuevoEstudiante, 
+    const nuevo: Usuario = { 
+      ...this.nuevoUsuario, 
       id: Date.now(),
-      fechaRegistro: new Date()
+      fechaRegistro: new Date(),
+      rol: 'estudiante'
     };
     
-    this.estudiantes.push(nuevo);
-    console.log('Estudiante agregado:', nuevo);
-    console.log('Total estudiantes ahora:', this.estudiantes.length);
+    this.usuarios = [...this.usuarios, nuevo];
+    this.actualizarFiltro();
+    console.log('Usuario agregado:', nuevo);
     
     this.guardarEnLocalStorage();
     this.limpiarFormulario();
     this.mostrarFormulario = false;
     this.actualizarFiltro();
     
-    alert('¡Estudiante agregado exitosamente!');
+    this.mostrarNotificacion('✅ Usuario agregado exitosamente');
   }
 
   limpiarFormulario() {
-    this.nuevoEstudiante = { 
+    this.nuevoUsuario = { 
       id: 0, 
       nombres: '', 
       apellidos: '',
@@ -164,81 +165,95 @@ export class AdministradorComponent implements OnInit {
       password: '',
       carrera: '',
       semestre: 1,
-      fechaRegistro: new Date()
+      fechaRegistro: new Date(),
+      rol: 'estudiante'
     };
     this.mostrarPassword = false;
   }
 
-  editarEstudiante(est: Estudiante) {
-    this.editando = { ...est };
+  editarUsuario(usuario: Usuario) {
+    this.editando = { ...usuario };
   }
 
   guardarEdicion() {
     if (!this.editando) return;
 
-    // Validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.editando.email)) {
       alert('Por favor ingrese un email válido');
       return;
     }
 
-    // Validar semestre
     if (this.editando.semestre < 1 || this.editando.semestre > 10) {
       alert('El semestre debe estar entre 1 y 10');
       return;
     }
 
-    // Verificar nombre de usuario único (excepto el actual)
-    if (this.estudiantes.some(e => e.nombreUsuario === this.editando!.nombreUsuario && e.id !== this.editando!.id)) {
+    if (this.editandoPasswordNueva && this.editandoPasswordNueva.length < 6) {
+      alert('La nueva contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+
+    if (this.usuarios.some(u => u.nombreUsuario === this.editando!.nombreUsuario && u.id !== this.editando!.id)) {
       alert('El nombre de usuario ya está en uso');
       return;
     }
 
-    // Verificar email único (excepto el actual)
-    if (this.estudiantes.some(e => e.email === this.editando!.email && e.id !== this.editando!.id)) {
+    if (this.usuarios.some(u => u.email === this.editando!.email && u.id !== this.editando!.id)) {
       alert('El email ya está registrado');
       return;
     }
 
-    const index = this.estudiantes.findIndex(e => e.id === this.editando!.id);
+    const index = this.usuarios.findIndex(u => u.id === this.editando!.id);
     if (index !== -1) {
-      this.estudiantes[index] = this.editando!;
+      if (this.editandoPasswordNueva.trim() !== '') {
+        this.editando.password = this.editandoPasswordNueva;
+      } else {
+        this.editando.password = this.usuarios[index].password;
+      }
+
+      this.usuarios = [
+        ...this.usuarios.slice(0, index),
+        this.editando!,
+        ...this.usuarios.slice(index + 1)
+      ];
+      this.actualizarFiltro();
       this.guardarEnLocalStorage();
       this.actualizarFiltro();
+
+      this.mostrarNotificacion('💾 Cambios guardados correctamente');
     }
+
     this.editando = null;
+    this.editandoPasswordNueva = '';
+    this.mostrarPasswordEdicion = false;
   }
 
   cancelarEdicion() {
     this.editando = null;
   }
 
-  eliminarEstudiante(id: number) {
-    if (confirm('¿Está seguro de que desea eliminar este estudiante?')) {
-      this.estudiantes = this.estudiantes.filter(e => e.id !== id);
+  eliminarUsuario(id: number) {
+    if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+      this.usuarios = this.usuarios.filter(u => u.id !== id);
       this.guardarEnLocalStorage();
       this.actualizarFiltro();
+      this.mostrarNotificacion('🗑️ Usuario eliminado');
     }
   }
 
-  buscarEstudiantes() {
-    console.log('Buscando:', this.busqueda);
-    console.log('Total estudiantes:', this.estudiantes.length);
-    
+  buscarUsuarios() {
     if (!this.busqueda || !this.busqueda.trim()) {
-      this.estudiantesFiltrados = [...this.estudiantes];
-      console.log('Sin búsqueda, mostrando todos');
+      this.usuariosFiltrados = [...this.usuarios];
     } else {
       const termino = this.busqueda.toLowerCase().trim();
-      this.estudiantesFiltrados = this.estudiantes.filter(e => 
-        (e.nombres && e.nombres.toLowerCase().includes(termino)) ||
-        (e.apellidos && e.apellidos.toLowerCase().includes(termino)) ||
-        (e.nombreUsuario && e.nombreUsuario.toLowerCase().includes(termino)) ||
-        (e.email && e.email.toLowerCase().includes(termino)) ||
-        (e.carrera && e.carrera.toLowerCase().includes(termino))
+      this.usuariosFiltrados = this.usuarios.filter(u => 
+        (u.nombres && u.nombres.toLowerCase().includes(termino)) ||
+        (u.apellidos && u.apellidos.toLowerCase().includes(termino)) ||
+        (u.nombreUsuario && u.nombreUsuario.toLowerCase().includes(termino)) ||
+        (u.email && u.email.toLowerCase().includes(termino)) ||
+        (u.carrera && u.carrera.toLowerCase().includes(termino))
       );
-      console.log('Resultados filtrados:', this.estudiantesFiltrados.length);
     }
     this.aplicarOrden();
   }
@@ -254,9 +269,8 @@ export class AdministradorComponent implements OnInit {
   }
 
   aplicarOrden() {
-    this.estudiantesFiltrados.sort((a, b) => {
+    this.usuariosFiltrados.sort((a, b) => {
       let comparacion = 0;
-      
       switch(this.ordenarPor) {
         case 'nombres':
           comparacion = (a.nombres + ' ' + a.apellidos).localeCompare(b.nombres + ' ' + b.apellidos);
@@ -268,31 +282,31 @@ export class AdministradorComponent implements OnInit {
           comparacion = new Date(a.fechaRegistro).getTime() - new Date(b.fechaRegistro).getTime();
           break;
       }
-      
       return this.ordenAscendente ? comparacion : -comparacion;
     });
   }
 
   actualizarFiltro() {
-    this.buscarEstudiantes();
+    this.buscarUsuarios();
   }
 
   guardarEnLocalStorage() {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('estudiantes', JSON.stringify(this.estudiantes));
+      localStorage.setItem('usuarios', JSON.stringify(this.usuarios));
     }
   }
 
   exportarCSV() {
-    const headers = ['Nombres', 'Apellidos', 'Usuario', 'Email', 'Carrera', 'Semestre', 'Fecha de Registro'];
-    const rows = this.estudiantes.map(e => [
-      e.nombres,
-      e.apellidos,
-      e.nombreUsuario,
-      e.email,
-      e.carrera,
-      e.semestre.toString(),
-      new Date(e.fechaRegistro).toLocaleDateString()
+    const headers = ['Nombres', 'Apellidos', 'Usuario', 'Email', 'Carrera', 'Semestre', 'Fecha de Registro', 'Contraseña'];
+    const rows = this.usuarios.map(u => [
+      u.nombres,
+      u.apellidos,
+      u.nombreUsuario,
+      u.email,
+      u.carrera,
+      u.semestre.toString(),
+      new Date(u.fechaRegistro).toLocaleDateString(),
+      u.password
     ]);
 
     let csv = headers.join(',') + '\n';
@@ -304,51 +318,20 @@ export class AdministradorComponent implements OnInit {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `estudiantes_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `usuarios_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
   }
 
-  // Método para agregar datos de prueba (útil para testing)
-  agregarDatosPrueba() {
-    const datosPrueba: Estudiante[] = [
-      {
-        id: Date.now() + 1,
-        nombres: 'Juan Carlos',
-        apellidos: 'Pérez García',
-        nombreUsuario: 'jperez',
-        email: 'juan.perez@universidad.edu',
-        password: '123456',
-        carrera: 'Ingeniería en Sistemas',
-        semestre: 5,
-        fechaRegistro: new Date()
-      },
-      {
-        id: Date.now() + 2,
-        nombres: 'María José',
-        apellidos: 'González López',
-        nombreUsuario: 'mgonzalez',
-        email: 'maria.gonzalez@universidad.edu',
-        password: '123456',
-        carrera: 'Medicina',
-        semestre: 3,
-        fechaRegistro: new Date()
-      },
-      {
-        id: Date.now() + 3,
-        nombres: 'Pedro Luis',
-        apellidos: 'Martínez Ruiz',
-        nombreUsuario: 'pmartinez',
-        email: 'pedro.martinez@universidad.edu',
-        password: '123456',
-        carrera: 'Derecho',
-        semestre: 7,
-        fechaRegistro: new Date()
-      }
-    ];
-
-    this.estudiantes.push(...datosPrueba);
-    this.guardarEnLocalStorage();
-    this.actualizarFiltro();
-    alert('Se agregaron 3 estudiantes de prueba');
+  // 🔔 Notificación elegante (sin alert)
+  mostrarNotificacion(mensaje: string) {
+    const notificacion = document.createElement('div');
+    notificacion.textContent = mensaje;
+    notificacion.classList.add('notificacion');
+    document.body.appendChild(notificacion);
+    setTimeout(() => notificacion.classList.add('mostrar'), 10);
+    setTimeout(() => {
+      notificacion.classList.remove('mostrar');
+      setTimeout(() => notificacion.remove(), 500);
+    }, 3000);
   }
 }

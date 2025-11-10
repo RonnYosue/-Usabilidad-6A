@@ -13,10 +13,9 @@
       <button class="nav-btn" (click)="toggleMenu()">
         <i class="bi bi-list"></i> {{ t('menu') }}
       </button>
-
-      <app-menu class="menu" [class.open]="menuOpen"  [userType]="userType"></app-menu>
-
       
+      <app-menu [isOpen]="menuOpen" [userType]="userType"></app-menu>
+
     </div>
 
     <!-- Otros botones de navegación -->

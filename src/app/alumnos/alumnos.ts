@@ -7,6 +7,8 @@ import { TaskCardComponent } from '../tareas/tareas';
 import { Ayuda } from '../ayuda/ayuda';
 import { Encabezado } from '../encabezado/encabezado';
 import { MenuComponent } from '../menu/menu';
+import { Router, NavigationEnd } from '@angular/router';
+import { Footer } from '../footer/footer';
 
 interface Task {
   id: number;
@@ -35,7 +37,8 @@ interface HelpRequest {
     TaskCardComponent,
     Ayuda,
     Encabezado,
-    MenuComponent
+    MenuComponent,
+    Footer
   ],
   templateUrl: './alumnos.html',
   styleUrls: ['./alumnos.css']
@@ -43,6 +46,7 @@ interface HelpRequest {
 export class AlumnosComponent implements OnInit {
   selectedTask: Task | null = null;
   showHelpModal = false;
+  menuOpen = false;
   
   
   stats = {

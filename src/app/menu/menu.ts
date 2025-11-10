@@ -12,6 +12,7 @@ import { ItemMenuComponent, MenuItem } from '../item-menu/item-menu';
 })
 export class MenuComponent implements OnInit {
   @Input() userType: 'admin' | 'estudiante' = 'estudiante'; // 👈 Por defecto estudiante
+  @Input() isOpen: boolean = false;
 
   menuItems: MenuItem[] = [];
 
@@ -32,9 +33,10 @@ export class MenuComponent implements OnInit {
       ];
     } else {
       return [
-        { icon: '🏠', label: 'Inicio', route: '/inicio', active: true },
+        { icon: '🏠', label: 'Inicio', route: '/alumnos', active: true },
         { icon: '🔍', label: 'buscar', route: '/buscar', active: false },
         { icon: '📖', label: 'Materias', route: '/materias', active: false },
+        {icon: '📃', label: 'Tareas', route: '/tareas', active: false },
         { icon: '📅', label: 'Calendario', route: '/calendario', active: false },
         { icon: '❓', label: 'Ayudita', route: '/ayudita', active: false },
         { icon: '📋', label: 'Términos de Uso', route: '/terminos', active: false },
