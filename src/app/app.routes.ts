@@ -11,6 +11,7 @@ import { PrivacidadComponent } from './privacidad/privacidad';
 import { MateriasComponent } from './materias/materias';
 import { TareasComponent } from './tareitas/tareitas';
 import { CalendarioComponent } from './calendario/calendario';
+import {VideoAccesibilidad} from './video-accesibilidad/video-accesibilidad';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,4 +27,5 @@ export const routes: Routes = [
   { path: 'materias', component: MateriasComponent },
   { path: 'tareas', component: TareasComponent },
   { path: 'calendario', component: CalendarioComponent },
+  { path: 'video-accesibilidad', component: VideoAccesibilidad },
 ];

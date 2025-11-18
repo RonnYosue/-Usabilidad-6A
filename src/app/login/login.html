@@ -22,9 +22,6 @@
 </div>
 
 <main class="auth-container" role="main">
-  <header>
-    <app-encabezado></app-encabezado>
-  </header>
 
   <div class="auth-box" role="form" aria-labelledby="login-title">
     <div class="auth-logo">
@@ -195,14 +192,11 @@
   </div>
 </main>
 
+<app-accessibility-menu></app-accessibility-menu>
+
 <!-- Pie de página abajo -->
 <footer class="auth-footer">
-  <p>© 2025 Organiza tus Tareas. Todos los derechos reservados.</p>
-  <p class="footer-links">
-    <a routerLink="/terminos" aria-label="Ver términos y condiciones">Términos y Condiciones</a> |
-    <a routerLink="/privacidad" aria-label="Ver política de privacidad">Política de Privacidad</a> |
-    <a routerLink="/ayudita" aria-label="Contactar con soporte">Ayuda y Soporte</a>
-  </p>
+  <app-footer></app-footer>
 </footer>
 
 <!-- Modal de Recuperación de Contraseña -->

@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Encabezado } from '../encabezado/encabezado';
+import { Footer } from '../footer/footer';
+import { AccessibilityMenu } from '../accessibility-menu/accessibility-menu';
 
 // Interfaces para tipado fuerte
 interface LoginAttempt {
@@ -19,7 +20,7 @@ interface Notification {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, Encabezado],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Footer, AccessibilityMenu],
   templateUrl: './login.html',
   styleUrls: ['./login.css']  
 })

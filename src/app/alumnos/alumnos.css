@@ -1,8 +1,23 @@
+/* ================================================
+   📊 DASHBOARD COMPONENT - Con soporte para modo oscuro
+   ================================================ */
+
 .dashboard-container {
-  background-color: #1F2041;
+  background-color: var(--bg-primary);
   min-height: 100vh;
   padding: 2rem;
   padding-top: 90px; /* Espacio para el encabezado fijo (70px de altura + 20px de margen) */
+  transition: background-color 0.3s ease;
+}
+
+/* Modo claro: fondo oscuro personalizado */
+:host-context(body:not(.dark-mode)) .dashboard-container {
+  background-color: #1F2041;
+}
+
+/* Modo oscuro: usa la variable */
+:host-context(body.dark-mode) .dashboard-container {
+  background-color: var(--bg-primary);
 }
 
 .stats-grid {
@@ -21,15 +36,33 @@
 }
 
 .section-title {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+/* En modo claro, mantener blanco */
+:host-context(body:not(.dark-mode)) .section-title {
+  color: white;
 }
 
 .section-subtitle {
-  color: #9CA3AF;
+  color: var(--text-secondary);
   font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+/* En modo claro, mantener gris específico */
+:host-context(body:not(.dark-mode)) .section-subtitle {
+  color: #9CA3AF;
+}
+
+/* En modo oscuro, usar variable con mejor contraste */
+:host-context(body.dark-mode) .section-subtitle {
+  color: var(--text-secondary);
+  opacity: 0.9;
 }
 
 .tasks-grid {
@@ -38,7 +71,7 @@
   gap: 1.5rem;
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
@@ -49,4 +82,64 @@
   .tasks-grid {
     grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 0.75rem;
+    padding-top: 80px;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ===== MEJORAS VISUALES ===== */
+
+/* Efecto de scroll suave */
+.dashboard-container {
+  scroll-behavior: smooth;
+}
+
+/* Animación de entrada para las secciones */
+.section {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading state para grids */
+.stats-grid:empty,
+.tasks-grid:empty {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-grid:empty::after,
+.tasks-grid:empty::after {
+  content: 'Cargando...';
+  color: var(--text-secondary);
+  font-size: 1rem;
+  opacity: 0.6;
 }

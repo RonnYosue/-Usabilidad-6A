@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { PreferenciasService } from '../services/preferencias.service';
 import { IdiomaService } from '../services/idioma.service';
 import { MenuComponent } from '../menu/menu';
+import { AccessibilityMenu } from '../accessibility-menu/accessibility-menu';
 
 @Component({
   selector: 'app-encabezado',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],
+  imports: [CommonModule, FormsModule, MenuComponent, AccessibilityMenu],
   templateUrl: './encabezado.html',
   styleUrls: ['./encabezado.css']
 })

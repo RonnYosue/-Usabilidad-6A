@@ -1,3 +1,7 @@
+/* ============================================================
+   📋 MENU COMPONENT - Consistente con Dashboard & Header
+   ============================================================ */
+
 .menu-item {
   position: relative;
   display: flex;
@@ -8,27 +12,49 @@
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   font-weight: 500;
 }
 
-.menu-item:hover {
-  background-color: #F3F4F6;
-  color: #1F2041;
+/* ====== Modo Claro ====== */
+:host-context(body:not(.dark-mode)) .menu-item {
+  color: #9CA3AF; /* Gris suave */
+}
+
+:host-context(body:not(.dark-mode)) .menu-item:hover {
+  background-color: #2B2C5A;
+  color: #ffffff;
   transform: translateX(5px);
 }
 
-.menu-item.active {
-  background: linear-gradient(135deg, #1F2041 0%, #3B82F6 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(31, 32, 65, 0.3);
+/* ====== Modo Oscuro ====== */
+:host-context(body.dark-mode) .menu-item {
+  color: var(--text-secondary);
 }
 
-.menu-item.active:hover {
+:host-context(body.dark-mode) .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  transform: translateX(5px);
+}
+
+/* ====== Estado Activo ====== */
+.menu-item.active {
+  background: linear-gradient(135deg, #1F2041 0%, #3B82F6 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(31, 32, 65, 0.3);
   transform: translateX(0);
 }
 
+/* Hover sobre activo (mantiene estilo consistente) */
+.menu-item.active:hover {
+  background: linear-gradient(135deg, #2B2C5A 0%, #60A5FA 100%);
+  box-shadow: 0 4px 14px rgba(31, 32, 65, 0.35);
+  transform: translateX(0);
+}
+
+/* ====== Icono ====== */
 .menu-icon {
   font-size: 1.5rem;
   line-height: 1;
@@ -36,15 +62,19 @@
   align-items: center;
   justify-content: center;
   width: 28px;
+  transition: color 0.3s ease;
 }
 
+/* ====== Texto ====== */
 .menu-label {
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.3s ease;
 }
 
+/* ====== Indicador lateral ====== */
 .menu-indicator {
   position: absolute;
   right: 0;
@@ -54,23 +84,51 @@
   height: 60%;
   background-color: white;
   border-radius: 4px 0 0 4px;
+  transition: opacity 0.3s ease;
 }
 
+/* ====== Estado activo: indicador visible ====== */
+.menu-item.active .menu-indicator {
+  opacity: 1;
+}
+
+/* ====== No activo: oculto ====== */
+.menu-item:not(.active) .menu-indicator {
+  opacity: 0;
+}
+
+/* ====== Responsivo ====== */
 @media (max-width: 1024px) {
   .menu-item {
     padding: 1rem;
     justify-content: center;
   }
-  
+
   .menu-label {
     display: none;
   }
-  
+
   .menu-indicator {
     display: none;
   }
-  
+
   .menu-icon {
     font-size: 1.75rem;
+  }
+}
+
+/* ====== Animación sutil ====== */
+.menu-item {
+  animation: fadeInMenu 0.4s ease-out;
+}
+
+@keyframes fadeInMenu {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

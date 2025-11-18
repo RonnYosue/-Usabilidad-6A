@@ -1,9 +1,18 @@
+/* ================================================
+   📅 CALENDARIO COMPONENT - Con soporte para modo oscuro
+   ================================================ */
+
 .calendario-wrapper {
   min-height: 100vh;
-  background-color: #1F2041;
+  background-color: var(--bg-primary);
   padding-top: 70px;
+  transition: background-color 0.3s ease;
 }
 
+/* Modo claro: fondo personalizado */
+:host-context(body:not(.dark-mode)) .calendario-wrapper {
+  background-color: #1F2041;
+}
 
 .main-layout {
   display: flex;
@@ -17,24 +26,35 @@
   max-width: 1600px;
 }
 
+/* ===== PAGE HEADER ===== */
 .page-header {
   margin-bottom: 2rem;
 }
 
 .page-header h1 {
   font-size: 2.5rem;
-  color: white;
+  color: var(--text-primary);
   margin: 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: color 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .page-header h1 {
+  color: white;
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-top: 0.5rem;
+  transition: color 0.3s ease;
 }
 
-/* Controles de Vista */
+:host-context(body:not(.dark-mode)) .subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== CONTROLES DE VISTA ===== */
 .vista-controls {
   display: flex;
   gap: 1rem;
@@ -44,23 +64,41 @@
 
 .vista-btn {
   padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid transparent;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1rem;
 }
 
+:host-context(body:not(.dark-mode)) .vista-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: transparent;
+  color: #1f2937;
+}
+
 .vista-btn:hover {
-  background: white;
+  background: var(--bg-secondary);
   transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+:host-context(body:not(.dark-mode)) .vista-btn:hover {
+  background: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .vista-btn.active {
+  background: var(--bg-primary);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+:host-context(body:not(.dark-mode)) .vista-btn.active {
   background: white;
   border-color: #4facfe;
   color: #4facfe;
@@ -70,28 +108,46 @@
 .btn-nueva-tarea {
   margin-left: auto;
   padding: 0.75rem 1.5rem;
-  background: white;
-  color: #4facfe;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
   border: none;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+:host-context(body:not(.dark-mode)) .btn-nueva-tarea {
+  background: white;
+  color: #4facfe;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-nueva-tarea:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+:host-context(body:not(.dark-mode)) .btn-nueva-tarea:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Calendario Container */
+/* ===== CALENDARIO CONTAINER ===== */
 .calendario-container {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
   animation: fadeIn 0.5s ease;
+  transition: all 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .calendario-container {
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 @keyframes fadeIn {
@@ -105,7 +161,7 @@
   }
 }
 
-/* Header del Calendario */
+/* ===== HEADER DEL CALENDARIO ===== */
 .calendario-header {
   display: flex;
   align-items: center;
@@ -113,20 +169,22 @@
   gap: 2rem;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid var(--border-color);
+  transition: border-color 0.3s ease;
 }
 
 .calendario-header h2 {
   font-size: 1.75rem;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0;
   font-weight: 700;
   min-width: 250px;
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 .btn-nav {
-  background: #f3f4f6;
+  background: var(--bg-tertiary);
   border: none;
   width: 40px;
   height: 40px;
@@ -138,33 +196,57 @@
   transition: all 0.3s ease;
 }
 
+:host-context(body:not(.dark-mode)) .btn-nav {
+  background: #f3f4f6;
+}
+
 .btn-nav:hover {
-  background: #e5e7eb;
+  background: var(--border-color);
   transform: scale(1.1);
+}
+
+:host-context(body:not(.dark-mode)) .btn-nav:hover {
+  background: #e5e7eb;
 }
 
 .btn-nav svg {
   width: 20px;
   height: 20px;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .btn-nav svg {
   color: #4b5563;
 }
 
 .btn-hoy {
   padding: 0.5rem 1.25rem;
-  background: #4facfe;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+:host-context(body:not(.dark-mode)) .btn-hoy {
+  background: #4facfe;
 }
 
 .btn-hoy:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+:host-context(body:not(.dark-mode)) .btn-hoy:hover {
   background: #3b9ce6;
 }
 
-/* Días de la Semana */
+/* ===== DÍAS DE LA SEMANA ===== */
 .calendario-dias-semana {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -176,11 +258,12 @@
   padding: 0.75rem;
   text-align: center;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.9rem;
+  transition: color 0.3s ease;
 }
 
-/* Grid del Calendario */
+/* ===== GRID DEL CALENDARIO ===== */
 .calendario-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -190,20 +273,30 @@
 .dia-celda {
   aspect-ratio: 1;
   padding: 0.75rem;
-  border: 2px solid #f3f4f6;
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   display: flex;
   flex-direction: column;
+  background: var(--bg-secondary);
+}
+
+:host-context(body:not(.dark-mode)) .dia-celda {
   background: white;
+  border-color: #f3f4f6;
 }
 
 .dia-celda:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  transform: scale(1.05);
+}
+
+:host-context(body:not(.dark-mode)) .dia-celda:hover {
   border-color: #4facfe;
   box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
-  transform: scale(1.05);
 }
 
 .dia-celda.otro-mes {
@@ -211,8 +304,13 @@
 }
 
 .dia-celda.hoy {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   color: white;
+  border-color: var(--primary);
+}
+
+:host-context(body:not(.dark-mode)) .dia-celda.hoy {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   border-color: #4facfe;
 }
 
@@ -222,6 +320,12 @@
 }
 
 .dia-celda.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  background: var(--bg-tertiary);
+}
+
+:host-context(body:not(.dark-mode)) .dia-celda.selected {
   border-color: #4facfe;
   box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
   background: #eff6ff;
@@ -233,9 +337,14 @@
 
 .dia-numero {
   font-size: 1rem;
-  color: #1f2937;
+  color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .dia-numero {
+  color: #1f2937;
 }
 
 .dia-tareas {
@@ -254,19 +363,26 @@
 
 .mas-tareas {
   font-size: 0.7rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-left: 0.25rem;
+  transition: color 0.3s ease;
 }
 
-/* Detalle del Día */
+/* ===== DETALLE DEL DÍA ===== */
 .detalle-dia {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: #f9fafb;
+  background: var(--bg-secondary);
   border-radius: 12px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   animation: expandDown 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .detalle-dia {
+  background: #f9fafb;
+  border-color: #e5e7eb;
 }
 
 @keyframes expandDown {
@@ -286,19 +402,20 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .detalle-header h3 {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0;
   font-weight: 700;
+  transition: color 0.3s ease;
 }
 
 .btn-close-detalle {
-  background: #fee2e2;
-  color: #dc2626;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
   border: none;
   width: 32px;
   height: 32px;
@@ -309,9 +426,19 @@
   transition: all 0.3s ease;
 }
 
+:host-context(body:not(.dark-mode)) .btn-close-detalle {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 .btn-close-detalle:hover {
-  background: #fecaca;
+  background: var(--danger);
+  color: white;
   transform: rotate(90deg);
+}
+
+:host-context(body:not(.dark-mode)) .btn-close-detalle:hover {
+  background: #fecaca;
 }
 
 .detalle-tareas {
@@ -324,13 +451,22 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   transition: all 0.3s ease;
 }
 
+:host-context(body:not(.dark-mode)) .tarea-item {
+  background: white;
+  border-color: #e5e7eb;
+}
+
 .tarea-item:hover {
+  box-shadow: var(--shadow);
+}
+
+:host-context(body:not(.dark-mode)) .tarea-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -338,8 +474,12 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #4facfe;
+  accent-color: var(--primary);
   flex-shrink: 0;
+}
+
+:host-context(body:not(.dark-mode)) .tarea-item input[type="checkbox"] {
+  accent-color: #4facfe;
 }
 
 .tarea-info {
@@ -348,14 +488,16 @@
 
 .tarea-info h4 {
   font-size: 1rem;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .tarea-info h4.tachado {
   text-decoration: line-through;
-  color: #9ca3af;
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .tarea-meta {
@@ -380,37 +522,48 @@
 }
 
 .hora {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.85rem;
+  transition: color 0.3s ease;
 }
 
 .sin-tareas-dia {
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-secondary);
   padding: 2rem;
   font-style: italic;
+  transition: color 0.3s ease;
 }
 
-/* Vista Lista */
+/* ===== VISTA LISTA ===== */
 .lista-container {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
   animation: fadeIn 0.5s ease;
+  transition: all 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .lista-container {
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .lista-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .lista-header h3 {
   font-size: 1.75rem;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0;
   font-weight: 700;
+  transition: color 0.3s ease;
 }
 
 .tareas-proximas {
@@ -423,22 +576,47 @@
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: #f9fafb;
+  background: var(--bg-secondary);
   border-radius: 12px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease;
 }
 
+:host-context(body:not(.dark-mode)) .tarea-lista-item {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
 .tarea-lista-item:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px);
+}
+
+:host-context(body:not(.dark-mode)) .tarea-lista-item:hover {
   border-color: #4facfe;
   box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
 }
 
 .tarea-lista-item.urgente {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+  animation: pulse 2s infinite;
+}
+
+:host-context(body:not(.dark-mode)) .tarea-lista-item.urgente {
   border-color: #fca5a5;
   background: #fef2f2;
-  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
 }
 
 .tarea-fecha-col {
@@ -454,36 +632,55 @@
   flex-direction: column;
   align-items: center;
   padding: 0.75rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .fecha-box {
+  background: white;
+  border-color: #e5e7eb;
 }
 
 .fecha-dia {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .fecha-mes {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .dias-restantes {
   padding: 0.25rem 0.75rem;
-  background: #dbeafe;
-  color: #1e40af;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--primary);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+:host-context(body:not(.dark-mode)) .dias-restantes {
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .tarea-lista-item.urgente .dias-restantes {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}
+
+:host-context(body:not(.dark-mode)) .tarea-lista-item.urgente .dias-restantes {
   background: #fee2e2;
   color: #dc2626;
 }
@@ -498,8 +695,12 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
-  accent-color: #4facfe;
+  accent-color: var(--primary);
   margin-top: 0.25rem;
+}
+
+:host-context(body:not(.dark-mode)) .tarea-checkbox input[type="checkbox"] {
+  accent-color: #4facfe;
 }
 
 .tarea-detalles {
@@ -508,20 +709,23 @@
 
 .tarea-detalles h4 {
   font-size: 1.25rem;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   font-weight: 700;
+  transition: color 0.3s ease;
 }
 
 .tarea-detalles h4.tachado {
   text-decoration: line-through;
-  color: #9ca3af;
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .tarea-descripcion {
-  color: #6b7280;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0.5rem 0 1rem 0;
+  transition: color 0.3s ease;
 }
 
 .tarea-meta-lista {
@@ -531,7 +735,7 @@
   align-items: center;
 }
 
-/* Empty State Lista */
+/* ===== EMPTY STATE LISTA ===== */
 .empty-state-lista {
   text-align: center;
   padding: 4rem 2rem;
@@ -540,22 +744,27 @@
 .empty-icon {
   width: 80px;
   height: 80px;
-  color: #d1d5db;
+  color: var(--text-secondary);
   margin: 0 auto 1.5rem;
+  opacity: 0.4;
+  transition: color 0.3s ease;
 }
 
 .empty-state-lista h3 {
   font-size: 1.5rem;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin: 0 0 0.5rem 0;
+  transition: color 0.3s ease;
 }
 
 .empty-state-lista p {
-  color: #9ca3af;
+  color: var(--text-secondary);
   font-size: 1rem;
+  opacity: 0.8;
+  transition: color 0.3s ease;
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .calendario-grid {
     gap: 0.25rem;
@@ -625,4 +834,24 @@
     width: 6px;
     height: 6px;
   }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .calendario-container,
+  .lista-container {
+    padding: 1rem;
+  }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.vista-btn:focus-visible,
+.btn-nueva-tarea:focus-visible,
+.btn-nav:focus-visible,
+.btn-hoy:focus-visible,
+.dia-celda:focus-visible,
+.btn-close-detalle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
